@@ -1,0 +1,31 @@
+# Virtual environment
+.venv/
+
+# Environment variables / API keys
+.env
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Local databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE settings
+.vscode/
+
+# Temporary files
+*.tmp
+*.temp
