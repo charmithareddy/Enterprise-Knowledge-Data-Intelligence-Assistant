@@ -7,7 +7,7 @@ import urllib.error
 
 import numpy as np
 import streamlit as st
-
+from google import genai
 from fastembed import TextEmbedding
 from pypdf import PdfReader
 from docx import Document
@@ -22,8 +22,8 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
 POLICY_PATH = PROJECT_ROOT / "data" / "documents" / "company_policy.txt"
 
-OLLAMA_API = "http://localhost:11434/api/generate"
-MODEL_NAME = "qwen2.5:3b"
+GEMINI_MODEL = "gemini-3.8-flash"
+MODEL_NAME = GEMINI_MODEL
 
 SIMILARITY_THRESHOLD = 0.40
 SCORE_MARGIN = 0.15
@@ -504,7 +504,7 @@ def is_company_question(question):
 
 
 # ============================================================
-# 12. GENERATE ANSWER WITH QWEN
+# 12. GENERATE ANSWER WITH GEMINI
 # ============================================================
 
 def generate_answer(
@@ -515,11 +515,21 @@ def generate_answer(
     general_mode=False,
 ):
     """
-    Use the local Qwen model to generate an answer.
+    Generate answers using Gemini.
 
-    Document context is used when relevant.
-    General AI answers are allowed for non-company questions.
+    Uses document context for company-specific questions,
+    conversation history for follow-ups, and web search
+    results when supplied by the application.
     """
+
+    try:
+        api_key = st.secrets["GEMINI_API_KEY"]
+    except (KeyError, FileNotFoundError):
+        return (
+            "Gemini API key is not configured. "
+            "Add GEMINI_API_KEY to .streamlit/secrets.toml "
+            "for local use or the deployment secrets settings."
+        )
 
     history_text = ""
 
@@ -582,54 +592,30 @@ CURRENT USER QUESTION:
 ANSWER:
 """
 
-    payload = {
-        "model": MODEL_NAME,
-        "prompt": prompt,
-        "stream": False,
-        "options": {
-            "temperature": 0.2,
-        },
-    }
-
-    request = urllib.request.Request(
-        OLLAMA_API,
-        data=json.dumps(payload).encode("utf-8"),
-        headers={
-            "Content-Type": "application/json",
-        },
-        method="POST",
-    )
-
     try:
-        with urllib.request.urlopen(
-            request,
-            timeout=180,
-        ) as response:
-            result = json.loads(
-                response.read().decode("utf-8")
-            )
+        client = genai.Client(api_key=api_key)
 
-        answer = result.get("response", "").strip()
-
-        return answer or "The AI model returned an empty answer."
-
-    except urllib.error.URLError:
-        return (
-            "I couldn't connect to Ollama. Make sure Ollama is "
-            f"running and the '{MODEL_NAME}' model is installed."
+        response = client.models.generate_content(
+            model=GEMINI_MODEL,
+            contents=prompt,
+            config={
+                "temperature": 0.2,
+                "max_output_tokens": 1500,
+            },
         )
 
-    except TimeoutError:
+        answer = (response.text or "").strip()
+
+        return answer or "Gemini returned an empty answer. Please try again."
+
+    except Exception as error:
         return (
-            "The AI model took too long to respond. "
-            "Please try again."
+            "Gemini could not generate a response. "
+            "Check your API key, internet connection, model access, "
+            "and API usage limits. "
+            f"Technical details: {type(error).__name__}: {error}"
         )
 
-    except (json.JSONDecodeError, ValueError):
-        return "I couldn't process the response from the AI model."
-
-
-# ============================================================
 # 13. SIDEBAR
 # ============================================================
 
@@ -640,21 +626,19 @@ with st.sidebar:
     st.divider()
 
     st.markdown("### ⚙️ AI Configuration")
-
     use_web = st.toggle(
         "Enable web search",
         value=True,
         help="Search public web results for questions that appear to need current information.",
     )
 
-    st.caption(f"Local model: {MODEL_NAME}")
+    st.caption(f"Gemini model: {MODEL_NAME}")
     st.caption("Embeddings: FastEmbed")
-    st.caption("Runtime: Ollama")
+    st.caption("Runtime: Google Gemini API")
 
     st.divider()
 
     st.markdown("### 📂 Upload documents")
-
     uploaded_files = st.file_uploader(
         "Upload PDF, Word, or text files",
         type=["pdf", "docx", "txt"],
@@ -665,7 +649,6 @@ with st.sidebar:
     st.divider()
 
     st.markdown("### 💡 Example questions")
-
     st.markdown(
         """
         **Company documents**
@@ -802,7 +785,7 @@ with col3:
         unsafe_allow_html=True,
     )
 
-st.markdown("### 💬 Chat with your AI assistant")
+st.markdown("### Chat with your AI assistant")
 
 if documents:
     document_names = list(
@@ -816,9 +799,9 @@ if documents:
         f"Knowledge base: {len(document_names)} document(s) available"
     )
 
-    with st.expander("📂 Active documents"):
-        for name in document_names:
-            st.write(f"• {name}")
+    st.markdown("### Active documents")
+    for name in document_names:
+        st.write(f"- {name}")
 else:
     st.info(
         "No documents are currently loaded. "
@@ -862,7 +845,7 @@ for message in st.session_state.messages:
         sources = message.get("sources", [])
 
         if sources:
-            with st.expander("📄 View document sources"):
+            with st.expander("ðŸ“„ View document sources"):
                 for number, source in enumerate(sources, start=1):
                     st.markdown(
                         f"**[{number}] {source['section']}**"
@@ -878,7 +861,7 @@ for message in st.session_state.messages:
         web_sources = message.get("web_sources", [])
 
         if web_sources:
-            with st.expander("🌐 View web search results"):
+            with st.expander("ðŸŒ View web search results"):
                 st.markdown(web_sources)
 
 
@@ -976,7 +959,7 @@ if question:
         st.markdown(answer)
 
         if sources:
-            with st.expander("📄 View document sources"):
+            with st.expander("ðŸ“„ View document sources"):
                 for number, source in enumerate(sources, start=1):
                     st.markdown(
                         f"**[{number}] {source['section']}**"
@@ -990,7 +973,7 @@ if question:
                     st.text(source["content"])
 
         if web_display:
-            with st.expander("🌐 View web search results"):
+            with st.expander("ðŸŒ View web search results"):
                 st.markdown(web_display)
 
     st.session_state.messages.append(
