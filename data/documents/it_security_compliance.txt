@@ -1,0 +1,33 @@
+NEXORA TECHNOLOGIES
+INFORMATION SECURITY, ZERO-TRUST & SOC2 COMPLIANCE STANDARD
+OPERATIONAL DIRECTIVE & AUDIT SPECIFICATION
+
+1. ACCESS CONTROL & IDENTITY MANAGEMENT
+Nexora Technologies operates under a strict Zero-Trust Architecture.
+All employee and contractor access to production infrastructure requires Hardware Security Key (FIDO2/WebAuthn) Multi-Factor Authentication (MFA).
+SMS-based verification and email one-time passcodes are strictly prohibited for production access.
+Role-Based Access Control (RBAC) and the Principle of Least Privilege are enforced across all cloud tenants.
+Privileged administrator sessions expire after 4 hours of inactivity and require re-authentication with hardware biometric keys.
+Employee access credentials must never be shared, hardcoded in repositories, or stored in unapproved password vaults.
+
+2. DATA CLASSIFICATION AND HANDLING TIERS
+All company and customer data must be classified into one of four sensitivity tiers:
+- Tier 1: Public - Marketing collateral, public documentation, open whitepapers. No encryption restrictions.
+- Tier 2: Internal - Internal operating procedures, department wikis, general roadmaps. Requires TLS 1.3 in transit and standard tenant isolation.
+- Tier 3: Confidential - Employee salary data, business financials, code repositories. Must be encrypted at rest using AES-256 and restricted to authorized personnel.
+- Tier 4: Restricted - Customer Personally Identifiable Information (PII), API tokens, database encryption keys, and customer operational datasets. Requires column-level envelope encryption, dedicated VPC isolation, and audited access logs retained for 7 years.
+
+3. INCIDENT RESPONSE SEVERITY LEVELS & SLA PROTOCOLS
+Security incidents must be reported immediately to security@nexora.internal. Severity classifications and SLAs are defined as follows:
+- Severity 1 (Critical): Active data breach, unauthorized production database access, or total service downtime. Response SLA: 15 minutes. Mandatory executive notification to CISO, CEO, and Legal within 1 hour. Regulatory notification (e.g., GDPR/CCPA) within 72 hours.
+- Severity 2 (High): Compromise of an individual administrative account or vulnerable dependency exposed to the internet. Response SLA: 1 hour. Remediation required within 12 hours.
+- Severity 3 (Medium): Unpatched internal non-critical vulnerability or violation of data classification policy. Response SLA: 4 hours. Remediation required within 72 hours.
+- Severity 4 (Low): Phishing attempt with no credential submission or suspicious network probe blocked by firewall. Response SLA: 24 hours. Reviewed during weekly security triage.
+
+4. COMPLIANCE AUDITING & REGULATORY STANDARDS
+Nexora maintains continuous compliance under the following enterprise certification frameworks:
+- SOC 2 Type II: Annual independent third-party audit covering Security, Availability, and Confidentiality trust principles.
+- ISO/IEC 27001:2022: Global Information Security Management System certification.
+- GDPR (General Data Protection Regulation): Full support for Data Subject Access Requests (DSAR) and Right to be Forgotten within 30 days.
+- Disaster Recovery & Continuity: Recovery Point Objective (RPO) is 15 minutes; Recovery Time Objective (RTO) is 60 minutes for Tier 1 infrastructure.
+Automated penetration testing is executed bi-weekly, supplemented by an annual external red-team engagement.

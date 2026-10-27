@@ -1,0 +1,29 @@
+NEXORA TECHNOLOGIES
+ENTERPRISE PRODUCT CATALOG, SERVICE LEVEL AGREEMENT (SLA) & SUPPORT TIERS
+
+1. ENTERPRISE PRODUCT CATALOG & SPECIFICATIONS
+Nexora provides four primary enterprise data and AI products:
+- Nexora CloudPlatform: Fully managed multicloud data lake and elastic compute engine. Offers auto-scaling, automated cross-region replication, and serverless querying.
+- Nexora EnterpriseAI: Agentic AI orchestration platform integrating RAG, GraphRAG, text-to-SQL data querying, and machine learning model serving. Supports hybrid cloud and on-premise air-gapped deployments.
+- Nexora SecuritySuite: Automated compliance posture management, zero-trust perimeter enforcement, runtime vulnerability scanning, and audit logging.
+- Nexora DataHub: Unified metadata catalog, enterprise ETL pipelines, and bi-directional real-time data sync across Snowflake, Databricks, PostgreSQL, and BigQuery.
+
+2. SERVICE AVAILABILITY (UPTIME) COMMITMENTS
+Service availability is measured monthly, excluding scheduled maintenance announced 5 business days in advance:
+- Enterprise Tier (Platinum): 99.95% monthly uptime guarantee (maximum allowable downtime: 21.9 minutes per month).
+- Business Tier (Gold): 99.90% monthly uptime guarantee (maximum allowable downtime: 43.8 minutes per month).
+- Developer Tier (Standard): 99.50% monthly uptime guarantee (best effort support).
+
+3. SERVICE LEVEL CREDITS SCHEDULE
+If Nexora fails to meet the guaranteed monthly uptime, customers on Enterprise or Business tiers are eligible for service credits:
+- Uptime between 99.0% and 99.94% (Enterprise Tier): 10% credit applied to that month's subscription fee.
+- Uptime between 95.0% and 98.99%: 25% credit applied to that month's subscription fee.
+- Uptime below 95.0%: 50% credit applied to that month's subscription fee.
+Claims must be submitted within 30 days of the impacted calendar month with corresponding incident ticket references.
+
+4. CUSTOMER SUPPORT TIERS & SEVERITY RESPONSE TIMES
+- Critical Incident (Sev-1): System or production workload down with no available workaround. Response time: <30 minutes (24/7/365 dedicated engineering bridge).
+- High Incident (Sev-2): Significant degradation in platform performance or core feature impaired. Response time: <2 hours (24/7/365).
+- Medium Incident (Sev-3): Minor feature defect or non-critical operational impairment. Response time: <8 business hours.
+- Low / General Inquiries (Sev-4): General questions, documentation requests, or minor feature enhancement suggestions. Response time: <24 business hours.
+API Rate Limits for Enterprise Customers: Up to 10,000 requests per minute with guaranteed p99 latency under 250 milliseconds.

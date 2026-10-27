@@ -1,0 +1,39 @@
+NEXORA TECHNOLOGIES
+EXECUTIVE FINANCIAL PERFORMANCE & STRATEGIC OUTLOOK
+FISCAL YEAR 2025 (Q4 & FULL YEAR AUDITED REPORT)
+
+1. EXECUTIVE SUMMARY & REVENUE HIGHLIGHTS
+Nexora Technologies achieved record operational performance for the fiscal year ended December 31, 2025.
+Annual Recurring Revenue (ARR) reached $142.8 million, representing a 34.2% year-over-year increase compared to FY2024 ($106.4M).
+Fourth quarter (Q4) standalone revenue stood at $41.2 million, driven by strong enterprise adoption of the EnterpriseAI and CloudPlatform product lines.
+Net Revenue Retention (NRR) closed at 118.5%, demonstrating robust customer lifetime value and expansion across existing enterprise accounts.
+Gross profit margin expanded by 220 basis points to 78.4%, reflecting cloud infrastructure optimization and automation in customer support operations.
+
+2. PRODUCT LINE PERFORMANCE
+Revenue distribution across Nexora's core product offerings for FY2025 was as follows:
+- CloudPlatform: $68.2 million (47.8% of total revenue). Growth rate: +22% YoY. Core driver is enterprise database migration and serverless compute workloads.
+- EnterpriseAI: $41.5 million (29.1% of total revenue). Growth rate: +88% YoY. Highest margin segment (82.1%), accelerating due to enterprise RAG and automated analytics deployments.
+- SecuritySuite: $21.1 million (14.8% of total revenue). Growth rate: +29% YoY. Bolstered by zero-trust identity compliance and threat detection add-ons.
+- DataHub: $12.0 million (8.4% of total revenue). Growth rate: +15% YoY. Enterprise data pipeline and integration connectors.
+
+3. GEOGRAPHIC PERFORMANCE & EXPANSION
+Global market distribution for FY2025:
+- North America: $77.1 million (54.0% of revenue) - Core foundation with 410 enterprise clients.
+- Europe, Middle East & Africa (EMEA): $39.9 million (28.0% of revenue) - Accelerated by GDPR-compliant private cloud deployments.
+- Asia Pacific (APAC): $20.0 million (14.0% of revenue) - Fastest regional growth (+48% YoY) centered in Singapore, Tokyo, and Sydney.
+- Latin America (LATAM): $5.8 million (4.0% of revenue) - Emerging market launch in Brazil and Mexico.
+
+4. PROFITABILITY & OPERATIONAL EXPENDITURES
+Total Operating Expenses (OpEx) for FY2025 totaled $89.4 million, allocated strategically across key business divisions:
+- Research & Development (R&D): $44.7 million (50% of OpEx) - Focused on next-generation agentic workflows, on-premise SLM inference, and graph intelligence.
+- Sales & Marketing (S&M): $29.5 million (33% of OpEx) - Customer acquisition cost (CAC) payback period improved from 14.2 months to 10.8 months.
+- General & Administrative (G&A): $15.2 million (17% of OpEx) - Includes legal, compliance, and human resources scaling.
+Operating Income (EBIT) was $22.5 million, up from $8.1 million in FY2024, resulting in a healthy 15.8% operating margin. Free Cash Flow stood at $18.4 million.
+
+5. STRATEGIC GUIDANCE FOR FISCAL YEAR 2026
+For the full year FY2026, the executive leadership team projects:
+- Full year revenue between $185.0 million and $192.0 million (+30% to +34% YoY growth).
+- Q1 FY2026 projected revenue of $44.5M to $46.0M.
+- Expansion of international headcount by 65 team members, with primary hires in AI systems engineering and solution architecture.
+- Planned capital expenditures of $12.5M for dedicated high-security GPU compute clusters in Frankfurt and Virginia data centers.
+- Long-term operating margin target sustained between 18% and 22%.
