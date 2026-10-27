@@ -2,6 +2,7 @@
 
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue.svg?logo=python&logoColor=white)](https://www.python.org/)
 [![Streamlit](https://img.shields.io/badge/Streamlit-1.35%2B-FF4B4B.svg?logo=streamlit&logoColor=white)](https://streamlit.io/)
+[![Streamlit Cloud](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://share.streamlit.io/)
 [![Google Gemini API](https://img.shields.io/badge/LLM-Google%20Gemini%202.5-4285F4.svg?logo=google&logoColor=white)](https://ai.google.dev/)
 [![FastEmbed](https://img.shields.io/badge/Embeddings-FastEmbed%20%7C%20BGE--Small-green.svg)](https://github.com/qdrant/fastembed)
 [![NetworkX](https://img.shields.io/badge/GraphRAG-NetworkX-orange.svg)](https://networkx.org/)
@@ -95,8 +96,12 @@ flowchart TD
 ```text
 Enterprise_Knowledge_Data_Intelligence_Assistant/
 │
+├── streamlit_app.py          # Root entrypoint for Streamlit Community Cloud
 ├── app/
-│   └── streamlit_app.py          # Full-featured multi-tab Streamlit dashboard
+│   └── streamlit_app.py      # Full-featured multi-tab Streamlit dashboard
+├── .streamlit/
+│   ├── config.toml           # Enterprise theme & server parameters
+│   └── secrets.toml.example  # Secrets template
 │
 ├── config/
 │   └── (Configuration settings and defaults)
@@ -191,11 +196,33 @@ GEMINI_API_KEY = "your-gemini-api-key-here"
 ```
 *(Note: If no API key is provided, the platform automatically runs in deterministic local mode with full access to SQL data, Graph traversal, Vector citations, and ML predictions!)*
 
-### 5. Launch the Application
+### 5. Launch the Application Locally
 ```bash
-streamlit run app/streamlit_app.py
+streamlit run streamlit_app.py
 ```
 The application will open in your browser at `http://localhost:8501`.
+
+---
+
+## 🌐 Deploy as a Live Website (Streamlit Community Cloud)
+
+You can deploy this repository as a publicly accessible live website for free on **Streamlit Community Cloud**:
+
+1. **Fork or Push to GitHub:** Ensure your latest commits are on your GitHub repository:
+   `https://github.com/charmithareddy/Enterprise-Knowledge-Data-Intelligence-Assistant`
+2. **Sign in to Streamlit:** Go to [share.streamlit.io](https://share.streamlit.io/) and connect your GitHub account.
+3. **Create New App:**
+   - **Repository:** `charmithareddy/Enterprise-Knowledge-Data-Intelligence-Assistant`
+   - **Branch:** `main`
+   - **Main file path:** `streamlit_app.py`
+4. **Configure Secrets:**
+   - Click **Advanced settings...**
+   - In the **Secrets** box, paste:
+     ```toml
+     GEMINI_API_KEY = "your-actual-gemini-api-key"
+     ```
+5. **Click Deploy!**
+   - Streamlit Cloud will automatically build dependencies from `requirements.txt` and launch your live web assistant with a permanent public URL (e.g., `https://enterprise-knowledge-assistant.streamlit.app`).
 
 ---
 
