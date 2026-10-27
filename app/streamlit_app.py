@@ -1,7 +1,8 @@
-from pathlib import Path
+﻿from pathlib import Path
 import hashlib
 import json
 import re
+import time
 import urllib.request
 import urllib.error
 
@@ -39,7 +40,7 @@ MAX_UPLOAD_SIZE_MB = 15
 
 st.set_page_config(
     page_title="Enterprise Knowledge AI",
-    page_icon="🧠",
+    page_icon="AI",
     layout="wide",
     initial_sidebar_state="expanded",
 )
@@ -514,13 +515,7 @@ def generate_answer(
     web_context="",
     general_mode=False,
 ):
-    """
-    Generate answers using Gemini.
-
-    Uses document context for company-specific questions,
-    conversation history for follow-ups, and web search
-    results when supplied by the application.
-    """
+    """Generate answers using Gemini, retrying temporary API failures."""
 
     try:
         api_key = st.secrets["GEMINI_API_KEY"]
@@ -532,7 +527,6 @@ def generate_answer(
         )
 
     history_text = ""
-
     for message in conversation_history[-8:]:
         history_text += (
             f"{message['role'].upper()}: "
@@ -594,38 +588,76 @@ ANSWER:
 
     try:
         client = genai.Client(api_key=api_key)
-
-        response = client.models.generate_content(
-            model=GEMINI_MODEL,
-            contents=prompt,
-            config={
-                "temperature": 0.2,
-                "max_output_tokens": 1500,
-            },
-        )
-
-        answer = (response.text or "").strip()
-
-        return answer or "Gemini returned an empty answer. Please try again."
-
     except Exception as error:
         return (
-            "Gemini could not generate a response. "
-            "Check your API key, internet connection, model access, "
-            "and API usage limits. "
+            "Could not initialize Gemini. Check your API configuration. "
             f"Technical details: {type(error).__name__}: {error}"
         )
+
+    for attempt in range(3):
+        try:
+            response = client.models.generate_content(
+                model=GEMINI_MODEL,
+                contents=prompt,
+                config={
+                    "temperature": 0.2,
+                    "max_output_tokens": 1500,
+                },
+            )
+
+            answer = (response.text or "").strip()
+            return answer or "Gemini returned an empty answer. Please try again."
+
+        except Exception as error:
+            error_text = str(error).upper()
+            temporary_markers = (
+                "503",
+                "UNAVAILABLE",
+                "429",
+                "RESOURCE_EXHAUSTED",
+                "500",
+                "INTERNAL",
+                "502",
+                "504",
+                "HIGH DEMAND",
+                "OVERLOADED",
+                "TEMPORARILY UNAVAILABLE",
+            )
+
+            is_temporary = any(
+                marker in error_text for marker in temporary_markers
+            )
+
+            if is_temporary and attempt < 2:
+                time.sleep(2 * (attempt + 1))
+                continue
+
+            if is_temporary:
+                return (
+                    "Gemini is temporarily busy after several attempts. "
+                    "Please wait a minute and try again. "
+                    "Your documents and question have not been changed."
+                )
+
+            return (
+                "Gemini could not generate a response. "
+                "Check your API key, model access, internet connection, "
+                "and API usage limits. "
+                f"Technical details: {type(error).__name__}: {error}"
+            )
+
+    return "Gemini could not generate a response. Please try again."
 
 # 13. SIDEBAR
 # ============================================================
 
 with st.sidebar:
-    st.markdown("## 🧠 Enterprise AI")
+    st.markdown("Enterprise AI")
     st.caption("Knowledge & Data Intelligence Assistant")
 
     st.divider()
 
-    st.markdown("### ⚙️ AI Configuration")
+    st.markdown("AI Configuration")
     use_web = st.toggle(
         "Enable web search",
         value=True,
@@ -638,7 +670,7 @@ with st.sidebar:
 
     st.divider()
 
-    st.markdown("### 📂 Upload documents")
+    st.markdown("Upload documents")
     uploaded_files = st.file_uploader(
         "Upload PDF, Word, or text files",
         type=["pdf", "docx", "txt"],
@@ -648,7 +680,7 @@ with st.sidebar:
 
     st.divider()
 
-    st.markdown("### 💡 Example questions")
+    st.markdown("Example questions")
     st.markdown(
         """
         **Company documents**
@@ -668,7 +700,7 @@ with st.sidebar:
 
     st.divider()
 
-    if st.button("🗑️ Clear conversation", use_container_width=True):
+    if st.button("Clear conversation", use_container_width=True):
         st.session_state.messages = []
         st.rerun()
 
@@ -756,7 +788,7 @@ with col1:
     st.markdown(
         """
         <div class="feature">
-            <h4>📚 Document Intelligence</h4>
+            <h4>Document Intelligence</h4>
             <p>Retrieve answers from your policy and uploaded documents.</p>
         </div>
         """,
@@ -767,7 +799,7 @@ with col2:
     st.markdown(
         """
         <div class="feature">
-            <h4>🧠 General AI</h4>
+            <h4>General AI</h4>
             <p>Ask general questions and request explanations or examples.</p>
         </div>
         """,
@@ -778,7 +810,7 @@ with col3:
     st.markdown(
         """
         <div class="feature">
-            <h4>🌐 Web Research</h4>
+            <h4>Web Research</h4>
             <p>Retrieve public search snippets for questions needing current information.</p>
         </div>
         """,
@@ -845,7 +877,7 @@ for message in st.session_state.messages:
         sources = message.get("sources", [])
 
         if sources:
-            with st.expander("ðŸ“„ View document sources"):
+            with st.expander("View document sources"):
                 for number, source in enumerate(sources, start=1):
                     st.markdown(
                         f"**[{number}] {source['section']}**"
@@ -861,7 +893,7 @@ for message in st.session_state.messages:
         web_sources = message.get("web_sources", [])
 
         if web_sources:
-            with st.expander("ðŸŒ View web search results"):
+            with st.expander("Web search sources"):
                 st.markdown(web_sources)
 
 
@@ -959,7 +991,7 @@ if question:
         st.markdown(answer)
 
         if sources:
-            with st.expander("ðŸ“„ View document sources"):
+            with st.expander("View document sources"):
                 for number, source in enumerate(sources, start=1):
                     st.markdown(
                         f"**[{number}] {source['section']}**"
@@ -973,7 +1005,7 @@ if question:
                     st.text(source["content"])
 
         if web_display:
-            with st.expander("ðŸŒ View web search results"):
+            with st.expander("Web search sources"):
                 st.markdown(web_display)
 
     st.session_state.messages.append(
@@ -984,3 +1016,11 @@ if question:
             "web_sources": web_display,
         }
     )
+
+
+
+
+
+
+
+
